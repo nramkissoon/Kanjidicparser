@@ -1,3 +1,4 @@
+
 """ This is a script for parsing data from the KANJIDIC project (http://www.edrdg.org/wiki/index.php/KANJIDIC_Project)
 
 Script opens kanjidic2.xml and reads the data into the variable "all_lines".
@@ -7,12 +8,12 @@ because of their importance to reading and understanding kanji for intermediate/
 (See README for more details about what is parsed from kanjidic2.xml)
 After parsing, a nested Python dictionary is built with keys for each individual kanji character. Each key refers
 to another dictionary containing all information about that specific kanji key.
-Functionality is included to export the built dictionary as a pickle file for use in other projects.
+Functionality is included to export the built dictionary as a json file for use in other projects.
 """
 
+import json
 import re
-import pickle, time
-
+import time
 
 wanted_data = ["<!-- Entry for Kanji:", "<character>", "<literal>", "<freq>", "<jlpt>",
                '<reading r_type="ja_on">', '<reading r_type="ja_kun">', "<meaning>", "<nanori>",
@@ -57,14 +58,13 @@ def create_dict_keys(entries):
         for j in i:
             if (ord(j) >= ord('\u4e00')) and (ord(j) <= ord('\u9faf')):  # all kanji are in this range
                 keys[j] = {}
+                keys[j]["onyomi"] = []
+                keys[j]["kunyomi"] = []
+                keys[j]["nanori"] = []
+                keys[j]["meaning"] = []
+                keys[j]["freq"] = []
+                keys[j]["jlpt"] = []
                 break
-    for i in keys:  # creates keys for each nested dictionary
-        keys[i]["onyomi"] = []
-        keys[i]["kunyomi"] = []
-        keys[i]["nanori"] = []
-        keys[i]["meaning"] = []
-        keys[i]["freq"] = []
-        keys[i]["jlpt"] = []
     return keys
 
 
@@ -113,25 +113,25 @@ def create_kanji_dict():
     return kanji_dict
 
 
-def export_to_pickle(kanji_dict):
-    """ Exports parameter as a pickle file to be used later"""
+def export_to_json(kanji_dict):
+    """ Exports parameter as a json file to be used later"""
 
-    output_dest = open("kanji_dict.pickle", "wb")
-    pickle.dump(kanji_dict, output_dest)
+    output_dest = open("kanji_dict.json", "w")
+    json.dump(kanji_dict, output_dest)
     output_dest.close()
 
 
 def get_kanji_dict():
-    """ Retrieves the kanji dictionary pickle file if it exists"""
+    """ Retrieves the kanji dictionary json file if it exists"""
 
     try:
-        ff = open("kanji_dict.pickle", "rb")
-        kanji_dict = pickle.load(ff)
+        ff = open("kanji_dict.json", "rb")
+        kanji_dict = json.load(ff)
         ff.close()
         return kanji_dict
     except FileNotFoundError:
-        print("kanji_dict.pickle not found in current directory")
-        print("Make sure kanji_dict.pickle has been created")
+        print("kanji_dict.json not found in current directory")
+        print("Make sure kanji_dict.json has been created")
         raise FileNotFoundError
 
 
@@ -154,8 +154,8 @@ kanji_data = create_kanji_dict()
 print("kanji_dict created")
 print()
 
-print("exporting to pickle file...")
-export_to_pickle(kanji_data)
-print("data exported to kanji_dict.pickle")
+print("exporting to json file...")
+export_to_json(kanji_data)
+print("data exported to kanji_dict.json")
 d = time.time()
 print("process completed in " + str(round(d - t, 2)) + " seconds.")
