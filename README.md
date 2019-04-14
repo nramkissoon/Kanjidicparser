@@ -1,4 +1,6 @@
+
 **Kanjidicparser** 
+
 
 Kanjidicparser.py is a script for parsing data from the KANJIDIC project: 
 http://www.edrdg.org/wiki/index.php/KANJIDIC_Project
@@ -12,6 +14,7 @@ Make sure kanjidic2.xml is downloaded from the KANJIDIC project site into the sa
 run the script file. 
 
 **How to use kanji_dict.json**
+
 
 kanji_dict.json is a nested dictionary where each key is an individual kanji.
 Each kanji key links to another dictionary where kanji-specific information.
@@ -28,6 +31,7 @@ Example entry: 増
 Accessing information: kanji_dict.json loaded into variable _dict_
 
 _dict_["増"]["meanings"] returns the list ['increase', 'add', 'augment', 'gain', 'promote']
+
 
 **Notes regarding data fields**
 
