@@ -70,6 +70,7 @@ def create_dict_keys(entries):
 
 def create_dict_vals(keys, entries):
     """ Parses each string in the entries parameter and matches information to their proper places in the dictionary"""
+    
     for i in keys:
         for j in entries:
             if i in j:
@@ -85,18 +86,9 @@ def create_dict_vals(keys, entries):
                 keys[i]["meaning"] = meanings
                 keys[i]["freq"] = freq
                 keys[i]["jlpt"] = jlpt
-                if not keys[i]["nanori"]:
-                    keys[i]["nanori"] = " N/A "
-                if not keys[i]["jlpt"]:
-                    keys[i]["jlpt"] = " N/A "
-                if not keys[i]["onyomi"]:
-                    keys[i]["onyomi"] = " N/A "
-                if not keys[i]["kunyomi"]:
-                    keys[i]["kunyomi"] = " N/A "
-                if not keys[i]["meaning"]:
-                    keys[i]["meaning"] = " N/A "
-                if not keys[i]["freq"]:
-                    keys[i]["freq"] = " N/A "
+                for field in keys[i]:
+                    if not keys[i][field]:
+                        keys[i][field] = " N/A "
                 break
 
 
@@ -158,4 +150,4 @@ print("exporting to json file...")
 export_to_json(kanji_data)
 print("data exported to kanji_dict.json")
 d = time.time()
-print("process completed in " + str(round(d - t, 2)) + " seconds.")
+print("process completed in " + str(round(d - t, 2)) + " seconds for " + str(len(kanji_data)) + " kanji entries.")
